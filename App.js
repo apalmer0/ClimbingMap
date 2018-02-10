@@ -1,58 +1,40 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import { StackNavigator } from 'react-navigation'
 
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import SplashScreen from './src/screens/SplashScreen'
+import MapScreen from './src/screens/MapScreen'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+const fade = props => {
+  const { position } = props
+  const { index } = props.scene
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-      </View>
-    );
+  const opacity = position.interpolate({
+    inputRange: [index - 0.7, index, index + 0.7],
+    outputRange: [0.3, 1, 0.3],
+  })
+
+  return {
+    opacity,
+    transform: [{ translateX: 0 }, { translateY: 0 }],
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+const App = StackNavigator(
+  {
+    Map: {
+      screen: MapScreen,
+      navigationOptions: {
+        gesturesEnabled: false
+      },
+    },
+    Splash: { screen: SplashScreen },
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  {
+    initialRouteName: 'Splash',
+    headerMode: 'none',
+    transitionConfig: () => ({
+      screenInterpolator: props => fade(props),
+    }),
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+)
+
+export default App
