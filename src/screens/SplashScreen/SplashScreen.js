@@ -3,7 +3,7 @@ import { ImageBackground, Text } from 'react-native'
 
 import styles from './styles'
 
-const MILLISECONDS_TO_WAIT = 1000
+const MILLISECONDS_TO_WAIT = 100
 
 class SplashScreen extends Component {
   componentDidMount () {
